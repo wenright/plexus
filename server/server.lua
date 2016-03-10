@@ -28,8 +28,6 @@ function server.update()
   elseif ip ~= 'timeout' then
     error('Unknown network error: ' .. tostring(ip))
   end
-
-  socket.sleep(0.01)
 end
 
 return server
