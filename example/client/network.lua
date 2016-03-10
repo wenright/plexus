@@ -28,7 +28,7 @@ end)
 
 function network.send(cmd, params)
   local msg = network.id .. ' ' .. cmd
-  
+
   for i, param in pairs(params) do
     msg = msg .. ' ' .. tostring(param)
   end
@@ -43,13 +43,7 @@ function network.update()
     data, err = udp:receive()
 
     if data then
-      print(data)
       local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
-
-      print('Message received from server')
-      print('ID: ' .. tostring(id))
-      print('Command: ' .. tostring(cmd))
-      print('Parameters: ' .. tostring(params))
 
       if network.callbacks[cmd] then
         network.callbacks[cmd](params)
