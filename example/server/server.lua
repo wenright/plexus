@@ -5,6 +5,8 @@ local server = {
   id = -1
 }
 
+math.randomseed(os.time())
+
 local udp = socket.udp()
 assert(udp, 'UDP creation failed')
 udp:settimeout(0)
@@ -16,7 +18,13 @@ print('Server started')
 function server.on(cmd, callback)
   server.callbacks[cmd] = callback
 end
-  
+ 
+server.on('join', function(id, ip)
+  -- When a new user joins the room, assign them an ID
+  -- TODO make sure that this ID doesn't already exist
+  return 'assignID', { math.random(999999) }
+end)
+ 
 function server.send(ip, port, cmd, params)
   local msg = server.id .. ' ' .. cmd
   for i, param in pairs(params) do
