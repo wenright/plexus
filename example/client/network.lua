@@ -1,26 +1,36 @@
 local socket = require('socket')
 
-math.randomseed(os.time())
-
 local network = {
-  -- TODO a better way of creating an id (hash, MD5?)
-  id = math.random(99999999),
-  callbacks = {}
+  callbacks = {},
+  id = 0
 }
 
 local udp = socket.udp()
 assert(udp, 'Failed setting up UDP socket')
 udp:settimeout(0)
 
-function network.connect(ip, port)
+function network.connect(ip, port, callback)
   udp:setpeername(ip, port)
 
-  -- Send the server a message
-  udp:send(string.format('%s %s %d', network.id, 'join', os.time()))
+  callback()
 end
 
 function network.on(cmd, callback)
   network.callbacks[cmd] = calllback
+end
+
+function network.send(cmd, params)
+  local msg = network.id .. ' ' .. cmd
+  
+  for i, param in pairs(params) do
+    msg = msg .. ' ' .. tostring(param)
+  end
+
+  udp:send(msg)
+end
+
+function network.setID(id)
+  network.id = id or -1
 end
 
 function network.update()
@@ -34,9 +44,9 @@ function network.update()
       local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
 
       print('Message received from server')
-      print('ID: ' .. id)
-      print('Command: ' .. cmd)
-      print('Parameters: ' .. params)
+      print('ID: ' .. tostring(id))
+      print('Command: ' .. tostring(cmd))
+      print('Parameters: ' .. tostring(params))
 
       if network.callbacks[cmd] then
         network.callbacks[cmd](id, params)
