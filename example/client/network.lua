@@ -12,12 +12,19 @@ udp:settimeout(0)
 function network.connect(ip, port, callback)
   udp:setpeername(ip, port)
 
-  callback()
+  network.send('join', { os.time() })
+
+  if callback then callback() end
 end
 
 function network.on(cmd, callback)
-  network.callbacks[cmd] = calllback
+  network.callbacks[cmd] = callback
 end
+
+network.on('assignID', function(params)
+  network.id = tonumber(params:match("%d*"))
+end)
+
 
 function network.send(cmd, params)
   local msg = network.id .. ' ' .. cmd
@@ -27,10 +34,6 @@ function network.send(cmd, params)
   end
 
   udp:send(msg)
-end
-
-function network.setID(id)
-  network.id = id or -1
 end
 
 function network.update()
@@ -49,7 +52,7 @@ function network.update()
       print('Parameters: ' .. tostring(params))
 
       if network.callbacks[cmd] then
-        network.callbacks[cmd](id, params)
+        network.callbacks[cmd](params)
       end
     elseif err ~= 'timeout' then
       error('Network error: ' .. tostring(err))
