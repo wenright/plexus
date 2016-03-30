@@ -95,7 +95,7 @@ function Network.update(dt)
         Network.log('Unknown command "' .. cmd .. '"')
       end
     elseif err ~= 'timeout' then
-      -- TODO show some kind of toast to tell user there was an error
+      -- TODO show some kind of error message?
       print('Network error: ' .. tostring(err))
       return -1
     end
