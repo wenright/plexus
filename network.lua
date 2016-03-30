@@ -5,6 +5,7 @@ local Network = {
   callbacks = {},
   id = 0,
   sendrate = 0.1,
+  lastSend = 0,
   localVariables = {},
   variables = {}
 }
@@ -22,14 +23,26 @@ function Network.connect(ip, port)
 
   Network.isConnected = false
   Network.on('acknowledgeJoin', function(msg)
+    print("Connected to server")
     Network.isConnected = true
     Network.id = msg
   end)
 
-  repeat until Network.isConnected or Network.update() == -1
+  -- Continuously try to connect to server, give up after 5 seconds
+  local startTime = os.time()
+  local maxWaitTime = 5 * 1000
+  repeat
+    local response = Network.update() or 1
+
+    if os.time() - startTime >= maxWaitTime then
+      error('Failed to connect to server')
+    end
+  until Network.isConnected or response == -1
 
   if Network.isConnected then
     Network.log('Connected to server')
+
+    Network.lastSend = os.time()
 
     Network.instantiate('Player', {x = 0, y = 0})
   else
@@ -95,6 +108,7 @@ end
 function Network.update(dt)
   -- Receive data
   local data, err
+  local maxReceives = 500
 
   repeat
     data, err = udp:receive()
@@ -112,7 +126,16 @@ function Network.update(dt)
       print('Network error: ' .. tostring(err))
       return -1
     end
-  until not data
+
+    maxReceives = maxReceives - 1
+  until not data or maxReceives <= 0
+
+  -- Send data
+  if Network.lastSend - os.time() >= Network.sendrate then
+    Network.send('update', Network.localVariables)
+
+    Network.lastSend = os.time()
+  end
 end
 
 function Deserialize(ser)

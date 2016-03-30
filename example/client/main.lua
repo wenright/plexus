@@ -3,9 +3,9 @@ local network = require('network')
 network.connect('localhost', 3000)
 
 function love.update(dt)
-  network.update()
+  -- network.update()
 end
 
-function love.keypresesd(key)
+function love.keypressed(key)
   if key == 'escape' then love.event.quit() end
 end

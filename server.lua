@@ -6,6 +6,7 @@ local Server = {
   id = -1,
   players = {},
   numPlayers = 0,
+  entities = {},
   udp = nil,
   Serialize = Serialize
 }
@@ -82,8 +83,58 @@ function Server.update()
     error('Unknown network error: ' .. tostring(ip))
   end
 
-  socket.sleep(0.01)
+  socket.sleep(1)
 end
+
+-- These are a few built-in listeners that the user can feel free to change
+Server.on('join', function(params, nil_id, ip, port)
+  -- When a new user joins the room, assign them a new ID
+  local id = Server.newID()
+
+  Server.players[id] = {
+    ip = ip,
+    port = port,
+    id = id
+  }
+
+  Server.numPlayers = Server.numPlayers + 1
+
+  -- Send this new player all of the things that are currently spawned in the Server
+  for key, entity in pairs(Server.entities) do
+    Server.send(ip, port, 'instantiate', Server.Serialize(entity), entity.ownerID)
+  end
+
+  Server.log('New player joined.  Assigning ID ' .. id)
+
+  return 'acknowledgeJoin', Server.Serialize(id)
+end)
+
+Server.on('quit', function(params, id)
+  Server.log('Player ' .. id .. ' is exiting')
+  Server.players[id] = nil
+  Server.numPlayers = Server.numPlayers - 1
+
+  -- Remove all of a players objects when they leave
+  for key, entity in pairs(Server.entities) do
+    if entity.ownerID == id then
+      Server.entities[entity.id] = nil
+      Server.broadcast('destroy', Server.Serialize({id = entity.id}), id)
+    end
+  end
+
+  -- Clear out the objects on the server if that last player leaves
+  if Server.numPlayers == 0 then
+    Server.entities = {}
+
+    -- TODO Close down server after all players leave?
+    Server.log('Closing server')
+    love.event.quit()
+  end
+end)
+
+Server.on('instantiate', function(params, senderID)
+  Server.instantiate(params, senderID)
+end)
 
 function Server.Deserialize(ser)
   return setfenv(loadstring(ser), {})()
