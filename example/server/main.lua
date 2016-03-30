@@ -1,7 +1,7 @@
 local Server = require('server')
 
 function love.load()
-  Server.load()
+  Server.start()
 end
 
 function love.update(dt)
