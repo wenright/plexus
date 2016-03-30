@@ -1,4 +1,5 @@
 local socket = require('socket')
+local Serialize = require('lib.serialize')
 
 local Network = {
   callbacks = {},
@@ -28,16 +29,11 @@ function Network.connect(ip, port)
   repeat until Network.isConnected or Network.update() == -1
 
   if Network.isConnected then
-    Timer.every(Network.sendrate, function()
-      Network.send('update', Network.localVariables)
-    end)
-
     Network.log('Connected to server')
 
     Network.instantiate('Player', {x = 0, y = 0})
   else
     Network.log('Unable to connect to server')
-    Gamestate.switch(Menu)
   end
 end
 

@@ -1,4 +1,5 @@
 local socket = require('socket')
+local Serialize = require('lib.serialize')
 
 local Server = {
   callbacks = {},
