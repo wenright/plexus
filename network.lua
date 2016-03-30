@@ -27,27 +27,6 @@ function Network.connect(ip, port)
     Network.isConnected = true
     Network.id = msg
   end)
-
-  -- Continuously try to connect to server, give up after 5 seconds
-  local startTime = os.time()
-  local maxWaitTime = 5 * 1000
-  repeat
-    local response = Network.update() or 1
-
-    if os.time() - startTime >= maxWaitTime then
-      error('Failed to connect to server')
-    end
-  until Network.isConnected or response == -1
-
-  if Network.isConnected then
-    Network.log('Connected to server')
-
-    Network.lastSend = os.time()
-
-    Network.instantiate('Player', {x = 0, y = 0})
-  else
-    Network.log('Unable to connect to server')
-  end
 end
 
 function Network.on(cmd, callback)
