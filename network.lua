@@ -1,4 +1,4 @@
---- The network object.  Used on the client side to communicate with a server
+--- Used on the client side to communicate with a server
 -- @module Network
 -- @author Will
 -- @release 0.0.1
@@ -93,7 +93,7 @@ function Network.listen(objectID, name, t, interpolate)
 end
 
 --- Send a message to the server, it will be passed to clients
--- @tparam string cmd The command to send.  This should be the same as the listener on the client side
+-- @tparam string cmd The command to send.  This should be the same as the listener on the server side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 function Network.send(cmd, params)
   local msg = Network.id .. ' ' .. cmd .. ' ' .. Serialize(params)

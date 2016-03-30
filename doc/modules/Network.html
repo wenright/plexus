@@ -1,0 +1,408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="$(kind=='Topics' and '' or 'nowrap'">
+  <li><strong>Network</strong></li>
+  <li><a href="../modules/Server.html">Server</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Network</code></h1>
+<p>Used on the client side to communicate with a server</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Release</strong>: 0.0.1</li>
+        <li><strong>Author</strong>: Will</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#connect">connect (ip, port)</a></td>
+	<td class="summary">Connect to the server at ip:port.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#on">on (cmd, callback)</a></td>
+	<td class="summary">Used to set callbacks which are called when the server sends a certain command</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#watch">watch (objectID, t)</a></td>
+	<td class="summary">Watch a local variable, updating it to the server and other clients</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#listen">listen (objectID, name, t, interpolate)</a></td>
+	<td class="summary">Listen to an object over the server</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#send">send (cmd, params)</a></td>
+	<td class="summary">Send a message to the server, it will be passed to clients</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#instantiate">instantiate (t, properties)</a></td>
+	<td class="summary">instantiate an object accross the server.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#destroy">destroy (id)</a></td>
+	<td class="summary">Send a destroy command to the server.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update ()</a></td>
+	<td class="summary">Update the network.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Deserialize">Deserialize (ser)</a></td>
+	<td class="summary">Deserialize a string from the server by running the string and returning the result</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#log">log (str)</a></td>
+	<td class="summary">Print to the command line and log to a file</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Network">Network</a></td>
+	<td class="summary">Stores network variables and callbacks</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "connect"></a>
+    <strong>connect (ip, port)</strong>
+    </dt>
+    <dd>
+    Connect to the server at ip:port.   First function to be called once network is created
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ip</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         IP address of the server
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">number</span></span>
+         Port to connect to
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "on"></a>
+    <strong>on (cmd, callback)</strong>
+    </dt>
+    <dd>
+    Used to set callbacks which are called when the server sends a certain command
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">cmd</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The command to listen for. Ex: 'update'
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+         The function called when this command arrives
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "watch"></a>
+    <strong>watch (objectID, t)</strong>
+    </dt>
+    <dd>
+    Watch a local variable, updating it to the server and other clients
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">objectID</span>
+            <span class="types"><span class="type">number</span></span>
+         The objects ID, given by the server
+        </li>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         This is the table that will be watched
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "listen"></a>
+    <strong>listen (objectID, name, t, interpolate)</strong>
+    </dt>
+    <dd>
+    Listen to an object over the server
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">objectID</span>
+            <span class="types"><span class="type">number</span></span>
+         The objects ID, given by the server
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The key of the table to listen for
+        </li>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         The table to listen to
+        </li>
+        <li><span class="parameter">interpolate</span>
+            <span class="types"><span class="type">bool</span></span>
+         Whether or not to interpolate between previous and new values
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "send"></a>
+    <strong>send (cmd, params)</strong>
+    </dt>
+    <dd>
+    Send a message to the server, it will be passed to clients
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">cmd</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The command to send.  This should be the same as the listener on the server side
+        </li>
+        <li><span class="parameter">params</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Parameters to send to the listeners.  It will be serialized to a string and deserialized later
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "instantiate"></a>
+    <strong>instantiate (t, properties)</strong>
+    </dt>
+    <dd>
+    instantiate an object accross the server.   This needs to be implemented by the user
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+         The type of object to instantiate
+        </li>
+        <li><span class="parameter">properties</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Properties to spawn object with
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "destroy"></a>
+    <strong>destroy (id)</strong>
+    </dt>
+    <dd>
+    Send a destroy command to the server.   Listener needs to be implemented by client
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">number</span></span>
+         ID of object to destroy
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update ()</strong>
+    </dt>
+    <dd>
+    Update the network.   Loops through all messages (max of 500 per update), handling them by calling their callbacks
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        -1 if a timeout error occurred, or nil
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Deserialize"></a>
+    <strong>Deserialize (ser)</strong>
+    </dt>
+    <dd>
+    Deserialize a string from the server by running the string and returning the result
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ser</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The string to be deserialized
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "log"></a>
+    <strong>log (str)</strong>
+    </dt>
+    <dd>
+    Print to the command line and log to a file
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">str</span>
+            <span class="types"><a class="type" href="http://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The string to log
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Network"></a>
+    <strong>Network</strong>
+    </dt>
+    <dd>
+    Stores network variables and callbacks
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">udp</span>
+         The interface with the server
+        </li>
+        <li><span class="parameter">callbacks</span>
+         A table filled with callbacks that the user creates
+        </li>
+        <li><span class="parameter">id</span>
+         The ID assigned to this client by the server
+        </li>
+        <li><span class="parameter">sendrate</span>
+         How often to send updates to the server
+        </li>
+        <li><span class="parameter">localVariables</span>
+         Variables that this client is remembering, and updating to the server
+        </li>
+        <li><span class="parameter">variables</span>
+         Network variables that this client does not own, they will be updated by the server (from other clients)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
+<i style="float:right;">Last updated 2016-03-30 13:20:48 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
