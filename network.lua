@@ -67,19 +67,10 @@ Network.on('update', function(params)
   end
 end)
 
-Network.on('instantiate', function(obj, playerID)
-  assert(Objects[obj.type], 'Object of type ' .. tostring(obj.type) .. ' does not exist.')
-  assert(obj.properties, 'Must assign properties when instantiating a new object')
-
-  obj.properties.isLocalPlayer = playerID == Network.id
-  obj.properties.id = obj.id
-
-  Game.entities:add(obj.id, Objects[obj.type](obj.properties))
-end)
-
-Network.on('destroy', function(msg)
-  Game.entities:remove(msg.id)
-end)
+-- These two are ones that the client would have to implement
+-- TODO remove from here and add an example
+Network.on('instantiate', function(obj, playerID) end)
+Network.on('destroy', function(msg) end)
 
 function Network.watch(objectID, t)
   Network.localVariables[objectID] = t
