@@ -38,7 +38,9 @@ Network.on('update', function(params)
     local v = Network.variables[objectID]
     if v and v._listen then
       if v._interpolate then
-        Timer.tween(Network.sendrate, v[v._listen], newValue, 'linear')
+        -- TODO add tween function
+        -- Timer.tween(Network.sendrate, v[v._listen], newValue, 'linear')
+        v[v._listen] = newValue
       else
         v[v._listen] = newValue
       end
