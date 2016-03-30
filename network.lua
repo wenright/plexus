@@ -2,6 +2,7 @@ local socket = require('socket')
 local Serialize = require('lib.serialize')
 
 local Network = {
+  udp = nil,
   callbacks = {},
   id = 0,
   sendrate = 0.1,
@@ -10,12 +11,12 @@ local Network = {
   variables = {}
 }
 
-local udp = socket.udp()
-assert(udp, 'Failed setting up UDP socket')
-udp:settimeout(0)
-
 function Network.connect(ip, port)
-  udp:setpeername(ip, port)
+  Network.udp = socket.udp()
+  assert(Network.udp, 'Failed setting up UDP socket')
+
+  Network.udp:settimeout(0)
+  Network.udp:setpeername(ip, port)
 
   Network.time = 0
 
@@ -66,7 +67,7 @@ end
 function Network.send(cmd, params)
   local msg = Network.id .. ' ' .. cmd .. ' ' .. Serialize(params)
 
-  udp:send(msg)
+  Network.udp:send(msg)
 end
 
 function Network.instantiate(t, properties)
@@ -83,7 +84,7 @@ function Network.update(dt)
   local maxReceives = 500
 
   repeat
-    data, err = udp:receive()
+    data, err = Network.udp:receive()
 
     if data then
       local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
