@@ -33,6 +33,7 @@ function love.load()
     paddleLocationX = love.graphics.getWidth() - 40
   end
 
+  -- Set some listeners.  Listen for 'connected' and 'instantiate' commands.
   Network.on('connected', function()
     -- Spawn our player's paddle.  Client will be on right side, server on left
     Network.instantiate('Paddle', {x = paddleLocationX})
@@ -48,8 +49,6 @@ function love.load()
   Network.on('instantiate', function(obj, playerID)
     -- Add a few variables to the properties value
     obj.properties.isLocalPlayer = (playerID == Network.id)
-    print(playerID, Network.id)
-    print(obj.properties.isLocalPlayer)
     obj.properties.id = obj.id
 
     -- Add it to the table of objects in our game
@@ -81,4 +80,9 @@ end
 function love.keypressed(key)
   -- Quit on escape key
   if key == 'escape' then love.event.quit() end
+end
+
+-- Helper function to clamp values
+function math.clamp(min, n, max)
+  return math.min(math.max(n, min), max)
 end

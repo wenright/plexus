@@ -39,6 +39,9 @@ function Paddle:update(dt)
     elseif love.keyboard.isDown('s', 'down') then
       self.position.y = self.position.y + 1000 * dt
     end
+
+    -- Clamp max and min y values
+    self.position.y = math.clamp(0, self.position.y, love.graphics.getHeight() - 100)
   end
 end
 
