@@ -68,11 +68,6 @@ Network.on('update', function(params)
   end
 end)
 
--- These two are ones that the client would have to implement
--- TODO remove from here and add an example
-Network.on('instantiate', function(obj, playerID) end)
-Network.on('destroy', function(msg) end)
-
 --- Watch a local variable, updating it to the server and other clients
 -- @tparam number objectID The objects ID, given by the server
 -- @tparam table t This is the table that will be watched
