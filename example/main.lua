@@ -26,29 +26,42 @@ function love.load()
 
     print("Starting server")
 
+    -- Connect to the server
+    Network.connect(ip, port)
+
     -- Spawn the server's paddle on the left side
     Network.instantiate('Paddle', {x = 20})
 
     -- Spawn the ball
-    Network.insantiate('Ball', {})
+    Network.instantiate('Ball', {})
   else
     print("Joining a server")
 
+    -- Connect to the server
+    Network.connect(ip, port)
+
     -- Spawn our player's paddle.  Client will be on right side, server on left
-    Network.instantiate('Paddle', {x = love.graphics.getWidth() - 20})
+    Network.instantiate('Paddle', {x = love.graphics.getWidth() - 40})
   end
 
-  -- Connect to the server
-  Network.connect(ip, port)
-
   -- Add a listener for the instantiate command
-  Network.on('instantiate', function(properties)
+  Network.on('instantiate', function(obj, playerID)
     -- Instantiate an object of the same type as passed in by the callback
-    table.insert(gameObjects, Objects[properties.type]:new(properties))
+    local newObj = Objects[obj.type]:new(obj.properties)
+
+    -- Check to see if we instantiated this object
+    newObj.isLocalPlayer = (playerID == Network.id)
+
+    -- Add it to the table of objects in our game
+    table.insert(gameObjects, newObj)
   end)
 end
 
 function love.update(dt)
+  for key, obj in pairs(gameObjects) do
+    obj:draw()
+  end
+
   -- Update server and network.  These will receive messages and call the respective callback functions
   if isServer then
     Server.update()
@@ -57,7 +70,9 @@ function love.update(dt)
 end
 
 function love.draw()
-
+  for key, obj in pairs(gameObjects) do
+    obj:draw()
+  end
 end
 
 function love.keypressed(key)

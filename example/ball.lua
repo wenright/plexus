@@ -15,12 +15,15 @@ function Ball:new()
 end
 
 function Ball:update(dt)
-  -- Update position
-  self.x, self.y = self.x + self.vx * dt * speed, self.y + self.vy * dt * speed
+  if self.isLocalPlayer then
+    -- Update position
+    self.x, self.y = self.x + self.vx * dt * speed, self.y + self.vy * dt * speed
+  end
 end
 
 function Ball:draw()
-
+  love.graphics.setColor(255, 255, 255)
+  love.graphics.circle('fill', self.x, self.y, 50, 15)
 end
 
 return Ball
