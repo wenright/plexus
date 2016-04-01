@@ -41,7 +41,7 @@ function Paddle:update(dt)
     end
 
     -- Clamp max and min y values
-    self.position.y = math.clamp(0, self.position.y, love.graphics.getHeight() - 100)
+    self.position.y = math.min(math.max(self.position.y, 0), love.graphics.getHeight() - 100)
   end
 end
 

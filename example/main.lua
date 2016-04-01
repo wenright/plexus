@@ -81,8 +81,3 @@ function love.keypressed(key)
   -- Quit on escape key
   if key == 'escape' then love.event.quit() end
 end
-
--- Helper function to clamp values
-function math.clamp(min, n, max)
-  return math.min(math.max(n, min), max)
-end
