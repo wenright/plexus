@@ -117,7 +117,7 @@ function Server.update()
     error('Unknown network error: ' .. tostring(ip))
   end
 
-  socket.sleep(1)
+  --socket.sleep(1)
 end
 
 -- These are a few built-in listeners that the user can feel free to change

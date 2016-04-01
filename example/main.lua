@@ -46,20 +46,20 @@ function love.load()
 
   -- Add a listener for the instantiate command
   Network.on('instantiate', function(obj, playerID)
-    -- Instantiate an object of the same type as passed in by the callback
-    local newObj = Objects[obj.type]:new(obj.properties)
-
-    -- Check to see if we instantiated this object
-    newObj.isLocalPlayer = (playerID == Network.id)
+    -- Add a few variables to the properties value
+    obj.properties.isLocalPlayer = (playerID == Network.id)
+    print(playerID, Network.id)
+    print(obj.properties.isLocalPlayer)
+    obj.properties.id = obj.id
 
     -- Add it to the table of objects in our game
-    table.insert(gameObjects, newObj)
+    table.insert(gameObjects, Objects[obj.type]:new(obj.properties))
   end)
 end
 
 function love.update(dt)
   for key, obj in pairs(gameObjects) do
-    obj:draw()
+    obj:update(dt)
   end
 
   -- Update server and network.  These will receive messages and call the respective callback functions
