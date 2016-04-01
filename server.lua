@@ -27,14 +27,15 @@ local Server = {
 local DEBUG = true
 
 --- First call, used to initialize the server.  Sets up UDP to listen for clients
-function Server.start()
+-- @tparam number port Port number to host server on
+function Server.start(port)
   math.randomseed(os.time())
 
   Server.udp = socket.udp()
   assert(Server.udp, 'UDP creation failed')
   Server.udp:settimeout(0)
 
-  Server.udp:setsockname('*', 3000)
+  Server.udp:setsockname('*', port)
 
   Server.log('Server started')
 end
