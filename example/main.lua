@@ -16,6 +16,8 @@ local isServer = false
 local gameObjects = {}
 
 function love.load()
+  local paddleLocationX
+
   -- Display connection option, allowing player to either host or join a game
   if love.window.showMessageBox("Host or join?",
     "Start a new game or connect to a server",
@@ -25,25 +27,22 @@ function love.load()
     isServer = true
 
     print("Starting server")
-
-    -- Connect to the server
-    Network.connect(ip, port)
-
-    -- Spawn the server's paddle on the left side
-    Network.instantiate('Paddle', {x = 20})
-
-    -- Spawn the ball
-    Network.instantiate('Ball', {})
+    paddleLocationX = 20
   else
     print("Joining a server")
-
-    -- Connect to the server
-    Network.connect(ip, port)
-
-
-    -- Spawn our player's paddle.  Client will be on right side, server on left
-    Network.instantiate('Paddle', {x = love.graphics.getWidth() - 40})
+    paddleLocationX = love.graphics.getWidth() - 40
   end
+
+  Network.on('connected', function()
+    -- Spawn our player's paddle.  Client will be on right side, server on left
+    Network.instantiate('Paddle', {x = paddleLocationX})
+
+    -- Only the server should spawn the ball
+    if isServer then
+      -- Spawn the ball
+      Network.instantiate('Ball', {})
+    end
+  end)
 
   -- Add a listener for the instantiate command
   Network.on('instantiate', function(obj, playerID)
@@ -56,6 +55,9 @@ function love.load()
     -- Add it to the table of objects in our game
     table.insert(gameObjects, Objects[obj.type]:new(obj.properties))
   end)
+
+  -- Connect to the server
+  Network.connect(ip, port)
 end
 
 function love.update(dt)

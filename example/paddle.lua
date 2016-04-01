@@ -35,9 +35,9 @@ function Paddle:update(dt)
   if self.isLocalPlayer then
     -- Move our paddle here
     if love.keyboard.isDown('w', 'up') then
-      self.position.y = self.position.y + 1000 * dt
-    elseif love.keyboard.isDown('s', 'down') then
       self.position.y = self.position.y - 1000 * dt
+    elseif love.keyboard.isDown('s', 'down') then
+      self.position.y = self.position.y + 1000 * dt
     end
   end
 end

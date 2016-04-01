@@ -43,6 +43,10 @@ function Network.connect(ip, port)
     print("Connected to server")
     Network.isConnected = true
     Network.id = msg
+
+    if Network.callbacks['connected'] then
+      Network.callbacks['connected']()
+    end
   end)
 end
 
