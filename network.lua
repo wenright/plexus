@@ -36,7 +36,7 @@ function Network.connect(ip, port)
 
   Network.time = 0
 
-  Network.send('join', { os.time() })
+  Network.send('join', {})
 
   Network.isConnected = false
   Network.on('acknowledgeJoin', function(msg)
@@ -129,7 +129,7 @@ function Network.update()
       local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
 
       if Network.callbacks[cmd] then
-        Network.callbacks[cmd](Deserialize(params), tonumber(id))
+	Network.callbacks[cmd](Deserialize(params), tonumber(id))
       else
         Network.log('Unknown command "' .. cmd .. '"')
       end

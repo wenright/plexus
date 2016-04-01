@@ -23,7 +23,7 @@ end
 
 function Ball:draw()
   love.graphics.setColor(255, 255, 255)
-  love.graphics.circle('fill', self.x, self.y, 50, 15)
+  love.graphics.circle('fill', self.x, self.y, 15, 25)
 end
 
 return Ball

@@ -3,12 +3,11 @@ local Paddle = {}
 function Paddle:new(properties)
   assert(properties.x, 'X value must be assigned when creating a new paddle')
   assert(properties.id, 'Paddle must have a network ID')
-  assert(properties.isLocalPlayer ~= nil, 'Paddle must be either local or foreign')
 
   local paddle = {
     position = {
       x = properties.x,
-      y = love.graphics.getHeight() / 2
+      y = love.graphics.getHeight() / 2 - 50
     },
     id = properties.id,
     isLocalPlayer = properties.isLocalPlayer

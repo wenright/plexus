@@ -40,6 +40,7 @@ function love.load()
     -- Connect to the server
     Network.connect(ip, port)
 
+
     -- Spawn our player's paddle.  Client will be on right side, server on left
     Network.instantiate('Paddle', {x = love.graphics.getWidth() - 40})
   end
