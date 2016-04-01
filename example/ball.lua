@@ -15,7 +15,7 @@ function Ball:new()
 end
 
 function Ball:update(dt)
-
+  -- Update position
   self.x, self.y = self.x + self.vx * dt * speed, self.y + self.vy * dt * speed
 end
 
