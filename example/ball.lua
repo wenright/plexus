@@ -22,7 +22,7 @@ function Ball:new(properties)
 end
 
 function Ball:update(dt)
-  if self.isLocalPlayer then
+  if self.isLocalPlayer and Server.numPlayers == 2 then
     -- Update position
     self.position.x, self.position.y = self.position.x + self.vx * dt * speed, self.position.y + self.vy * dt * speed
 
@@ -30,7 +30,26 @@ function Ball:update(dt)
     if self.position.y > love.graphics.getHeight() - radius or self.position.y < radius then
       self.vy = self.vy * -1
     end
+
+    -- Check to see if a player won because the ball has gone offscreen
+    if self.position.x > love.graphics.getWidth() - radius then
+      -- Left player won
+      Ball:reset()
+    elseif self.position.x < radius then
+      -- Right player won
+      Ball:reset()
+    end
   end
+end
+
+function Ball:reset()
+  self.position = {
+    x = love.graphics.getWidth() / 2,
+    y = love.graphics.getHeight() / 2
+  }
+
+  self.vx = love.math.random()
+  self.vy = love.math.random()
 end
 
 function Ball:draw()

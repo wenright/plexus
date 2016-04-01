@@ -10,7 +10,8 @@ function Paddle:new(properties)
       y = love.graphics.getHeight() / 2 - 50
     },
     id = properties.id,
-    isLocalPlayer = properties.isLocalPlayer
+    isLocalPlayer = properties.isLocalPlayer,
+    score = 0
   }
 
   Paddle.sync(paddle)
