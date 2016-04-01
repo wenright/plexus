@@ -40,7 +40,7 @@ function Paddle:update(dt)
       self.position.y = self.position.y + 1000 * dt
     end
 
-    -- Clamp max and min y values
+    -- Clamp max and min y values so paddle can't go off screen
     self.position.y = math.min(math.max(self.position.y, 0), love.graphics.getHeight() - 100)
   end
 end
