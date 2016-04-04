@@ -11,7 +11,6 @@ local Serialize = require('lib.serialize')
 -- @field callbacks A table filled with callbacks that the user creates
 -- @field id The ID assigned to this client by the server
 -- @field sendrate How often to send updates to the server
--- @field variables Network variables that this client does not own, they will be updated by the server (from other clients)
 -- @table Network
 local Network = {
   udp = nil,
@@ -52,21 +51,6 @@ end
 function Network.on(cmd, callback)
   Network.callbacks[cmd] = callback
 end
-
-Network.on('update', function(params)
-  for objectID, newValue in pairs(params) do
-    local v = Network.variables[objectID]
-    if v and v._listen then
-      if v._interpolate then
-        -- TODO add tween function
-        -- Timer.tween(Network.sendrate, v[v._listen], newValue, 'linear')
-        v[v._listen] = newValue
-      else
-        v[v._listen] = newValue
-      end
-    end
-  end
-end)
 
 --- Send a message to the server, it will be passed to clients
 -- @tparam string cmd The command to send.  This should be the same as the listener on the server side
