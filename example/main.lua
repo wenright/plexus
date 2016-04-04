@@ -20,8 +20,8 @@ function love.load()
 
   -- Display connection option, allowing player to either host or join a game
   if love.window.showMessageBox("Host or join?",
-    "Start a new game or connect to a server",
-    {"Host", "Join"}) == 1 then
+      "Start a new game or connect to a server",
+      {"Host", "Join"}) == 1 then
     -- Start a server on port 3000
     Server.start(port)
     isServer = true

@@ -19,7 +19,7 @@ local Network = {
   callbacks = {},
   id = 0,
   sendrate = 0.1,
-  lastSend = 0,
+  lastSend = os.time(),
   localVariables = {},
   variables = {}
 }
@@ -142,7 +142,7 @@ function Network.update()
   until not data or maxReceives <= 0
 
   -- Send data
-  if Network.lastSend - os.time() >= Network.sendrate then
+  if os.time() - Network.lastSend >= Network.sendrate then
     Network.send('update', Network.localVariables)
 
     Network.lastSend = os.time()
