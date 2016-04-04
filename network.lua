@@ -11,7 +11,6 @@ local Serialize = require('lib.serialize')
 -- @field callbacks A table filled with callbacks that the user creates
 -- @field id The ID assigned to this client by the server
 -- @field sendrate How often to send updates to the server
--- @field localVariables Variables that this client is remembering, and updating to the server
 -- @field variables Network variables that this client does not own, they will be updated by the server (from other clients)
 -- @table Network
 local Network = {
@@ -20,8 +19,6 @@ local Network = {
   id = 0,
   sendrate = 0.1,
   lastSend = os.time(),
-  localVariables = {},
-  variables = {}
 }
 
 --- Connect to the server at ip:port.  First function to be called once network is created
@@ -40,7 +37,6 @@ function Network.connect(ip, port)
 
   Network.isConnected = false
   Network.on('acknowledgeJoin', function(msg)
-    print("Connected to server")
     Network.isConnected = true
     Network.id = msg
 
@@ -72,32 +68,13 @@ Network.on('update', function(params)
   end
 end)
 
---- Watch a local variable, updating it to the server and other clients
--- @tparam number objectID The objects ID, given by the server
--- @tparam table t This is the table that will be watched
-function Network.watch(objectID, t)
-  Network.localVariables[objectID] = t
-end
-
---- Listen to an object over the server
--- @tparam number objectID The objects ID, given by the server
--- @tparam string name The key of the table to listen for
--- @tparam table t The table to listen to
--- @tparam bool interpolate Whether or not to interpolate between previous and new values
--- @warning Interpolate does not work currently, will be added later
-function Network.listen(objectID, name, t, interpolate)
-  Network.variables[objectID] = t
-  Network.variables[objectID]._listen = name
-  Network.variables[objectID]._interpolate = interpolate
-end
-
 --- Send a message to the server, it will be passed to clients
 -- @tparam string cmd The command to send.  This should be the same as the listener on the server side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 function Network.send(cmd, params)
   local msg = Network.id .. ' ' .. cmd .. ' ' .. Serialize(params)
 
-  Network.udp:send(msg)
+  print(Network.udp:send(msg))
 end
 
 --- instantiate an object accross the server.  This needs to be implemented by the user
@@ -128,7 +105,7 @@ function Network.update()
       local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
 
       if Network.callbacks[cmd] then
-	Network.callbacks[cmd](Deserialize(params), tonumber(id))
+      	Network.callbacks[cmd](Deserialize(params), tonumber(id))
       else
         Network.log('Unknown command "' .. cmd .. '"')
       end
@@ -140,13 +117,6 @@ function Network.update()
 
     maxReceives = maxReceives - 1
   until not data or maxReceives <= 0
-
-  -- Send data
-  if os.time() - Network.lastSend >= Network.sendrate then
-    Network.send('update', Network.localVariables)
-
-    Network.lastSend = os.time()
-  end
 end
 
 --- Deserialize a string from the server by running the string and returning the result
