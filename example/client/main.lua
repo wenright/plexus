@@ -1,7 +1,3 @@
---- Client example
--- Run with `love example/client`
--- @module ClientExample
-
 local Network = require 'network'
 
 Network.on('connected', function()
