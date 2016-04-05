@@ -4,7 +4,14 @@ Network.on('connected', function()
   print('This function is called as soon as the client connects to the server')
 end)
 
+local start = Network.getTime()
+Network.on('pong', function(params)
+  print('Ping took ' .. Network.getTime() - start .. ' seconds')
+end)
+
 Network.connect('127.0.0.1', 3000)
+
+Network.send('ping', Network.getTime())
 
 function love.update(dt)
   -- Update reads in any messages received from the server

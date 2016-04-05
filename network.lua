@@ -74,6 +74,9 @@ function Network.destroy(id)
   Network.send('destroy', {id = id})
 end
 
+function Network.getTime()
+  return socket.gettime()
+end
 
 --- Update the network.  Loops through all messages (max of 500 per update), handling them by calling their callbacks
 -- @treturn number -1 if a timeout error occurred, or nil
