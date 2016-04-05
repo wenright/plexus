@@ -58,7 +58,7 @@ end
 function Network.send(cmd, params)
   local msg = Network.id .. ' ' .. cmd .. ' ' .. Serialize(params)
 
-  print(Network.udp:send(msg))
+  Network.udp:send(msg)
 end
 
 --- instantiate an object accross the server.  This needs to be implemented by the user
