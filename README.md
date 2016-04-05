@@ -2,17 +2,17 @@
 A networking library for games in Lua.  Written for [LOVE](love2d.org) games, but can be used in any Lua program as long as LuaSockets are available.
 
 # Usage
-To start a server, simply call start with a port number
+To start a server
 ``` Lua
 Server.start(3000)
 ```
 
-To connect to that server, call connect with an ip and a port
+To connect to that server
 ``` Lua
 Network.connect('127.0.0.1', 3000)
 ```
 
-Plexus uses listeners to trigger messages received by the server. For example...
+Plexus uses listeners to trigger messages received from the server. For example...
 ``` Lua
 Network.on('ping', function(message)
   print('Received a message!")
