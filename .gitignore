@@ -1,5 +1,6 @@
 # Ignore documentation.  It is uploaded at http://wenright.github.io/Plexus/
 doc/
+config.ld
 
 # Compiled Lua sources
 luac.out
