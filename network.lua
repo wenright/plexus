@@ -103,6 +103,8 @@ function Network.update()
   until not data or maxReceives <= 0
 end
 
+--- Gracefully exit from the server, telling it that this player has left
+-- If this function is not called, the server will think this player is still connected
 function Network.close()
   Network.send('quit', {})
 end
