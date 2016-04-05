@@ -13,7 +13,7 @@ local Serialize = require('lib.serialize')
 -- @field players A table filled with player objects
 -- @field numPlayers Keeps track of the number of players connected to the server
 -- @field entities Keeps track of any entities spawned into the game with instantiate
--- @table Network
+-- @table Server
 local Server = {
   udp = nil,
   callbacks = {},
