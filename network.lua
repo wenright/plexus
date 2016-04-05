@@ -74,6 +74,8 @@ function Network.destroy(id)
   Network.send('destroy', {id = id})
 end
 
+--- Get the current time in seconds
+-- Useful for determining lengths of time, like between pings
 function Network.getTime()
   return socket.gettime()
 end
