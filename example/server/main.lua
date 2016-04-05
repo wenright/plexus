@@ -7,5 +7,5 @@ function love.update(dt)
 end
 
 function love.draw()
-
+  love.graphics.print(Server.numPlayers .. ' user(s) connected to the server.')
 end

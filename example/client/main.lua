@@ -17,3 +17,7 @@ function love.draw()
     love.graphics.print('Connecting to the server...')
   end
 end
+
+function love.quit()
+  Network.close()
+end

@@ -155,15 +155,6 @@ Server.on('quit', function(params, id)
       Server.broadcast('destroy', Server.Serialize({id = entity.id}), id)
     end
   end
-
-  -- Clear out the objects on the server if that last player leaves
-  if Server.numPlayers == 0 then
-    Server.entities = {}
-
-    -- TODO Close down server after all players leave?
-    Server.log('Closing server')
-    love.event.quit()
-  end
 end)
 
 Server.on('instantiate', function(params, senderID)

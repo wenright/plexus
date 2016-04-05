@@ -103,6 +103,10 @@ function Network.update()
   until not data or maxReceives <= 0
 end
 
+function Network.close()
+  Network.send('quit', {})
+end
+
 --- Deserialize a string from the server by running the string and returning the result
 -- @tparam string ser The string to be deserialized
 function Deserialize(ser)
