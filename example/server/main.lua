@@ -1,3 +1,7 @@
+--- Server example
+-- Run with `love example/server`
+-- @module ServerExample
+
 local Server = require 'server'
 
 Server.start(3000)
