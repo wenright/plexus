@@ -40,9 +40,17 @@ describe('Plexus', function()
   repeat
     Network.update()
     Server.update()
-  until os.time() - start > 5
+  until os.time() - start > 5 or (pingCalled and connectedCalled and pongCalled)
 
   it('server should have called ping', function()
     assert.truthy(pingCalled)
+  end)
+
+  it('client should have called connected', function()
+    assert.truthy(connectedCalled)
+  end)
+
+  it('client should have called pong', function()
+    assert.truthy(pongCalled)
   end)
 end)
