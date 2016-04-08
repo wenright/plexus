@@ -55,7 +55,7 @@ end
 -- @tparam string cmd The command to send.  This should be the same as the listener on the client side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 -- @tparam number playerID The ID of the player sending the command
-function Server.send(ip, port, cmd, params, playerID)
+function Server.send(ip, port, playerID, cmd, params)
   local msg = playerID .. ' ' .. cmd .. ' ' .. params
 
   Server.udp:sendto(msg, ip, port)
@@ -65,22 +65,22 @@ end
 -- @tparam string cmd The command to send.  This should be the same as the listener on the client side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 -- @tparam number playerID The ID of the player sending the command
-function Server.broadcast(cmd, params, playerID)
+function Server.broadcast(playerID, cmd, params)
   for i, player in pairs(Server.players) do
-    Server.send(player.ip, player.port, cmd, params, playerID)
+    Server.send(player.ip, player.port, playerID, cmd, params)
   end
 end
 
 --- Spawn an object accross all clients
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 -- @tparam number senderID The ID of the player sending the command
-function Server.instantiate(params, senderID)
+function Server.instantiate(senderID, params)
   local id
   repeat
     id = Server.newID()
   until not Server.entities[id]
 
-  local t = Server.Deserialize(params)
+  local t = params
 
   t.id = id
   t.ownerID = senderID
@@ -89,7 +89,7 @@ function Server.instantiate(params, senderID)
   params = Server.Serialize(t)
 
   -- TODO send to other clients with a delay?
-  Server.broadcast('instantiate', params, senderID)
+  Server.broadcast(senderID, 'instantiate', params)
 end
 
 --- Update the network.  Loops through all messages, handling them by calling their callbacks
@@ -97,10 +97,12 @@ function Server.update()
   local data, ip, port = Server.udp:receivefrom()
 
   if data then
-    local playerID, cmd, params = data:match('^(%S*) (%S*) (.*)')
+    local dataTable = Server.Deserialize(data)
+
+    local playerID, cmd, params = dataTable.id, dataTable.cmd, dataTable.params
 
     if Server.callbacks[cmd] then
-      local msg, params = Server.callbacks[cmd](params, playerID, ip, port)
+      local msg, params = Server.callbacks[cmd](playerID, params, ip, port)
       if msg then
         Server.send(ip, port, msg, params, playerID)
       end
@@ -119,7 +121,7 @@ function Server.update()
 end
 
 -- These are a few built-in listeners that the user can feel free to change
-Server.on('join', function(params, nil_id, ip, port)
+Server.on('join', function(nil_id, params, ip, port)
   -- When a new user joins the room, assign them a new ID
   local id = Server.newID()
 
@@ -133,7 +135,7 @@ Server.on('join', function(params, nil_id, ip, port)
 
   -- Send this new player all of the things that are currently spawned in the Server
   for key, entity in pairs(Server.entities) do
-    Server.send(ip, port, 'instantiate', Server.Serialize(entity), entity.ownerID)
+    Server.send(ip, port, entity.ownerID, 'instantiate', Server.Serialize(entity))
   end
 
   Server.log('New player joined.  Assigning ID ' .. id)
@@ -141,7 +143,7 @@ Server.on('join', function(params, nil_id, ip, port)
   return 'acknowledgeJoin', Server.Serialize(id)
 end)
 
-Server.on('quit', function(params, id)
+Server.on('quit', function(id, params)
   Server.log('Player ' .. id .. ' is exiting')
   Server.players[id] = nil
   Server.numPlayers = Server.numPlayers - 1
@@ -155,7 +157,7 @@ Server.on('quit', function(params, id)
   end
 end)
 
-Server.on('instantiate', function(params, senderID)
+Server.on('instantiate', function(senderID, params)
   Server.instantiate(params, senderID)
 end)
 
