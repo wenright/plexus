@@ -34,7 +34,7 @@ describe('Plexus', function()
 
   Network.connect('127.0.0.1', 3000)
 
-  Network.send('ping', Network.getTime())
+  Network.send('ping', {Network.getTime()})
 
   local start = os.time()
   repeat

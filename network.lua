@@ -36,7 +36,9 @@ function Network.connect(ip, port)
 
   Network.isConnected = false
   Network.on('acknowledgeJoin', function(msg)
-    Network.isConnected = true
+    Network.connected = true
+    print("New id:")
+    print(msg)
     Network.id = msg
 
     if Network.callbacks['connected'] then
@@ -56,7 +58,7 @@ end
 -- @tparam string cmd The command to send.  This should be the same as the listener on the server side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 function Network.send(cmd, params)
-  local msg = Network.id .. ' ' .. cmd .. ' ' .. Serialize(params)
+  local msg = Serialize({id = Network.id, cmd = cmd, params = params})
 
   Network.udp:send(msg)
 end
@@ -96,7 +98,7 @@ function Network.update()
       local id, cmd, params = dataTable.id, dataTable.cmd, dataTable.params
 
       if Network.callbacks[cmd] then
-      	Network.callbacks[cmd](tonumber(id), params)
+      	Network.callbacks[cmd](params)
       else
         Network.log('Unknown command "' .. cmd .. '"')
       end

@@ -11,7 +11,7 @@ end)
 
 Network.connect('127.0.0.1', 3000)
 
-Network.send('ping', Network.getTime())
+Network.send('ping', {Network.getTime()})
 
 function love.update(dt)
   -- Update reads in any messages received from the server
@@ -20,7 +20,7 @@ end
 
 function love.draw()
   -- Network.isConnected is updated once the client receives an acknowledgement from the server
-  if Network.isConnected then
+  if Network.connected then
     love.graphics.print('Connected to the server')
   else
     love.graphics.print('Connecting to the server...')

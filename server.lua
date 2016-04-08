@@ -56,7 +56,7 @@ end
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 -- @tparam number playerID The ID of the player sending the command
 function Server.send(ip, port, playerID, cmd, params)
-  local msg = playerID .. ' ' .. cmd .. ' ' .. params
+  local msg = Serialize({id = id, cmd = cmd, params = params})
 
   Server.udp:sendto(msg, ip, port)
 end
@@ -102,9 +102,9 @@ function Server.update()
     local playerID, cmd, params = dataTable.id, dataTable.cmd, dataTable.params
 
     if Server.callbacks[cmd] then
-      local msg, params = Server.callbacks[cmd](playerID, params, ip, port)
-      if msg then
-        Server.send(ip, port, msg, params, playerID)
+      local newCmd, newParams = Server.callbacks[cmd](playerID, params, ip, port)
+      if newCmd then
+        Server.send(ip, port, playerID, newCmd, newParams)
       end
     else
       Server.broadcast('update', params, playerID)
@@ -140,7 +140,7 @@ Server.on('join', function(nil_id, params, ip, port)
 
   Server.log('New player joined.  Assigning ID ' .. id)
 
-  return 'acknowledgeJoin', Server.Serialize(id)
+  return 'acknowledgeJoin', id
 end)
 
 Server.on('quit', function(id, params)
