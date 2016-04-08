@@ -1,7 +1,7 @@
 --- Keeps clients up to date by sending messages back and forth
 -- @module Server
 -- @author Will
--- @release 0.0.1
+-- @release 0.0.2
 
 local socket = require('socket')
 local Serialize = require('lib.serialize')
@@ -75,18 +75,13 @@ end
 -- @tparam number senderID The ID of the player sending the command
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 function Server.instantiate(senderID, params)
-  local id
-  repeat
-    id = Server.newID()
-  until not Server.entities[id]
+  id = Server.newID()
 
-  local t = params
+  params.id = id
+  params.ownerID = senderID
+  Server.entities[id] = params
 
-  t.id = id
-  t.ownerID = senderID
-  Server.entities[id] = t
-
-  params = Server.Serialize(t)
+  params = Server.Serialize(params)
 
   -- TODO send to other clients with a delay?
   Server.broadcast(senderID, 'instantiate', params)

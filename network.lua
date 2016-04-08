@@ -1,7 +1,7 @@
 --- Used on the client side to communicate with a server
 -- @module Network
 -- @author Will
--- @release 0.0.1
+-- @release 0.0.2
 
 local socket = require('socket')
 local Serialize = require('lib.serialize')
@@ -85,7 +85,6 @@ end
 --- Update the network.  Loops through all messages (max of 500 per update), handling them by calling their callbacks
 -- @treturn number -1 if a timeout error occurred, or nil
 function Network.update()
-  -- Receive data
   local data, err
   local maxReceives = 500
 
@@ -103,7 +102,6 @@ function Network.update()
         Network.log('Unknown command "' .. cmd .. '"')
       end
     elseif err ~= 'timeout' then
-      -- TODO show some kind of error message?
       print('Network error: ' .. tostring(err))
       return -1
     end
