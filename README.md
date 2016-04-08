@@ -1,5 +1,5 @@
 # Plexus
-A networking library for games in Lua.  Written for [LOVE](love2d.org) games, but can be used in any Lua program as long as [LuaSockets](impa.br/~diego/software/luasocket/) are available.
+A networking library for games in Lua.  Written for [LOVE](love2d.org) games, but can be used in any Lua program as long as [LuaSockets](http://w3.impa.br/~diego/software/luasocket/) are available.
 
 # Usage
 To start a server
