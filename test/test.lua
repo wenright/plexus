@@ -1,27 +1,48 @@
 describe('Plexus', function()
+  local Network = require 'network'
+  local Server = require 'server'
+
   it('must have sockets installed', function()
     assert.truthy(require 'socket')
   end)
 
-  describe('Client: ', function()
-    local Network = require 'network'
-
-    it('Unable to locate plexus.network', function()
-      assert.truthy(Network)
-    end)
-
-    Network.on('connected', function()
-      print('This function is called as soon as the client connects to the server')
-    end)
-
-    local start = Network.getTime()
-    Network.on('pong', function(params)
-      print('Ping took ' .. Network.getTime() - start .. ' seconds')
-    end)
-
-    Network.connect('127.0.0.1', 3000)
-
-    Network.send('ping', Network.getTime())
+  it('Unable to locate plexus.network', function()
+    assert.truthy(Network)
   end)
 
+  it('Unable to locate plexus.server', function()
+    assert.truthy(Server)
+  end)
+
+  Server.start(3000)
+
+  local pingCalled = false
+  Server.on('ping', function(params, id, ip, port)
+    pingCalled = true
+    return 'pong', params
+  end)
+
+  local connectedCalled = false
+  Network.on('connected', function()
+    connectedCalled = true
+  end)
+
+  local pongCalled = false
+  Network.on('pong', function(params)
+    pongCalled = true
+  end)
+
+  Network.connect('127.0.0.1', 3000)
+
+  Network.send('ping', Network.getTime())
+
+  local start = os.time()
+  repeat
+    Network.update()
+    Server.update()
+  until os.time() - start > 5
+
+  it('server should have called ping', function()
+    assert.truthy(pingCalled)
+  end)
 end)
