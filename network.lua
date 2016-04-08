@@ -91,10 +91,12 @@ function Network.update()
     data, err = Network.udp:receive()
 
     if data then
-      local id, cmd, params = data:match('^(%S*) (%S*) (.*)')
+      local dataTable = Deserialize(data)
+
+      local id, cmd, params = dataTable.id, dataTable.cmd, dataTable.params
 
       if Network.callbacks[cmd] then
-      	Network.callbacks[cmd](Deserialize(params), tonumber(id))
+      	Network.callbacks[cmd](tonumber(id), params)
       else
         Network.log('Unknown command "' .. cmd .. '"')
       end
