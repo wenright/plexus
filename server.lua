@@ -52,9 +52,9 @@ end
 --- Sends a message to the clients
 -- @tparam string ip IP to send the command to
 -- @tparam number port Port to send the command to
+-- @tparam number playerID The ID of the player sending the command
 -- @tparam string cmd The command to send.  This should be the same as the listener on the client side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
--- @tparam number playerID The ID of the player sending the command
 function Server.send(ip, port, playerID, cmd, params)
   local msg = Serialize({id = id, cmd = cmd, params = params})
 
@@ -62,9 +62,9 @@ function Server.send(ip, port, playerID, cmd, params)
 end
 
 --- Send a message from one player to every player on the server
+-- @tparam number playerID The ID of the player sending the command
 -- @tparam string cmd The command to send.  This should be the same as the listener on the client side
 -- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
--- @tparam number playerID The ID of the player sending the command
 function Server.broadcast(playerID, cmd, params)
   for i, player in pairs(Server.players) do
     Server.send(player.ip, player.port, playerID, cmd, params)
@@ -72,8 +72,8 @@ function Server.broadcast(playerID, cmd, params)
 end
 
 --- Spawn an object accross all clients
--- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 -- @tparam number senderID The ID of the player sending the command
+-- @tparam table params Parameters to send to the listeners.  It will be serialized to a string and deserialized later
 function Server.instantiate(senderID, params)
   local id
   repeat
