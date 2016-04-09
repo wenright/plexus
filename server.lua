@@ -4,7 +4,7 @@
 -- @release 0.0.2
 
 local socket = require('socket')
-local Serialize = require('lib.serialize')
+local Serialize = require((...):gsub('%.server$', '') .. '.lib.serialize')
 
 --- Stores network variables and callbacks
 -- @field udp The interface with the clients
@@ -79,6 +79,7 @@ function Server.instantiate(senderID, params)
 
   params.id = id
   params.ownerID = senderID
+
   Server.entities[id] = params
 
   params = Server.Serialize(params)
