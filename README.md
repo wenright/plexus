@@ -24,7 +24,4 @@ Server.send('ping', Network.getTime())
 ```
 ... On the server side.  The second parameter is the message you are sending.  This can be anything from a number to a table.
 
-`send` will be called immediately, but the callbacks for `on` are only triggered in `update`.  So, make sure to have some sort of an infinite loop calling `Network.update()`.
-
-## Note
-Currently, this library uses [knife.serialize](https://github.com/airstruck/knife/blob/master/readme/serialize.md).  I am working on a small serializer that will sit inside the library itself, so it does not require any other dependencies.  
+`send` will be called immediately, but the callbacks for `on` are only triggered in `update`.  So, make sure to have some sort of an infinite loop calling `Network.update()`. 
