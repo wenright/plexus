@@ -103,7 +103,7 @@ function Server.update()
         Server.send(ip, port, playerID, newCmd, newParams)
       end
     else
-      Server.broadcast('update', params, playerID)
+      Server.broadcast(playerID, 'update', params)
     end
   elseif ip == 'closed' then
     -- This should mean that the player has disconnected
