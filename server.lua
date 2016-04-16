@@ -4,7 +4,7 @@
 -- @release 0.0.2
 
 local socket = require('socket')
-local Serialize = require((...):gsub('%.server$', '') .. '.lib.serialize')
+local Serialize = require('lib.serialize')
 
 --- Stores network variables and callbacks
 -- @field udp The interface with the clients
