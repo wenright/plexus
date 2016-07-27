@@ -1,5 +1,6 @@
 local Network = require 'network'
 
+-- the 'on' functions set up listeners for those commands
 Network.on('connected', function()
   print('This function is called as soon as the client connects to the server')
 end)
@@ -9,9 +10,12 @@ Network.on('pong', function(params)
   print('Ping took ' .. Network.getTime() - start .. ' seconds')
 end)
 
-Network.connect('127.0.0.1', 3000)
+function love.load ()
+  -- Connect to the server and send a message
+  Network.connect('127.0.0.1', 3000)
 
-Network.send('ping', {Network.getTime()})
+  Network.send('ping', {Network.getTime()})
+end
 
 function love.update(dt)
   -- Update reads in any messages received from the server
