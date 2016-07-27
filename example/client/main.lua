@@ -19,7 +19,7 @@ function love.update(dt)
 end
 
 function love.draw()
-  -- Network.isConnected is updated once the client receives an acknowledgement from the server
+  -- Network.connected is updated once the client receives an acknowledgement from the server
   if Network.connected then
     love.graphics.print('Connected to the server')
   else

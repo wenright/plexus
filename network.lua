@@ -34,7 +34,7 @@ function Network.connect(ip, port)
 
   Network.send('join', {})
 
-  Network.isConnected = false
+  Network.connected = false
   Network.on('acknowledgeJoin', function(msg)
     Network.connected = true
     print("New id:")
